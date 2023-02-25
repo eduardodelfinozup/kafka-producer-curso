@@ -1,0 +1,51 @@
+server:
+  port: 8081
+
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+      generate-ddl: false
+      dialect: org.hibernate.dialect.PostgreSQLDialect
+  datasource:
+    url: jdbc:postgresql://localhost:5432/pedidos
+    username: root
+    password: root
+    driver-class-name: org.postgresql.Driver
+  kafka:
+    bootstrap-servers: 127.0.0.1:9092
+    producer:
+      key-serializer : org.apache.kafka.common.serialization.StringSerializer
+      value-serializer : org.springframework.kafka.support.serializer.JsonSerializer
+      client-id: pedidos
+      topic: PEDIDO_NOVO
+
+  kafka2:
+    bootstrap-servers: 127.0.0.1:9093
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      client-id: conta
+      topic: NOVA_CONTA
+
+  kafka3:
+    bootstrap-servers: 127.0.0.1:9094
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      client-id: marketplace
+      topic: NOVA_PROMOCAO
+
+management:
+  health:
+    diskSpace:
+      enabled: false
+    ping:
+      enabled: false
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: health, scheduledtasks
