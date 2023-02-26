@@ -1,10 +1,8 @@
 package com.zupfood.pedidos.pedido;
 
-import com.zupfood.pedidos.item.Item;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Table(name = "pedido")
@@ -19,17 +17,18 @@ public class Pedido {
 
     private LocalDateTime dataCriado;
 
-    @OneToMany(mappedBy = "pedido")
-    private List<Item> items;
+    @Enumerated(EnumType.STRING)
+    private StatusPedido status;
+
 
     public Pedido() {
     }
 
-    public Pedido(Long idCliente, Long idRestaurante,List<Item> items) {
+    public Pedido(Long idCliente, Long idRestaurante) {
         this.idCliente = idCliente;
         this.idRestaurante = idRestaurante;
+        this.status = StatusPedido.SOLICITADO;
         this.dataCriado = LocalDateTime.now();
-        this.items = items;
     }
 
     public Long getId() {
@@ -48,8 +47,8 @@ public class Pedido {
         return dataCriado;
     }
 
-    public List<Item> getItems() {
-        return items;
+    public StatusPedido getStatus() {
+        return status;
     }
 
     @Override
@@ -59,7 +58,10 @@ public class Pedido {
                 ", idCliente=" + idCliente +
                 ", idRestaurante=" + idRestaurante +
                 ", dataCriado=" + dataCriado +
-                ", items=" + items +
                 '}';
+    }
+
+    public void cancelar() {
+        this.status = StatusPedido.CANCELADO;
     }
 }
