@@ -77,3 +77,10 @@ curl --request POST \
 
 ```
 
+# DELETAR PEDIDO
+
+```
+curl --request DELETE \
+  --url localhost:8081/pedidos/2\  
+
+```
