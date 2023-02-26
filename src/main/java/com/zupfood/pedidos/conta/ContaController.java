@@ -1,5 +1,6 @@
 package com.zupfood.pedidos.conta;
 
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,22 +21,23 @@ public class ContaController {
     public ContaRepository contaRepository;
 
     @Autowired
-    private ContaProducer contaProducer;
+    public ContaNovaProducer contaNovaProducer;
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> inserir(@Valid @RequestBody ContaRequest request) {
+    public ResponseEntity<?> inserir(@Valid @RequestBody ContaRequest request){
         logger.info("Cadastrando uma nova Conta");
         var conta = request.toModel();
 
-        if (contaRepository.findByDocumentoTitular(conta.getDocumentoTitular()).isPresent()) {
+        if(contaRepository.findByDocumentoTitular(conta.getDocumentoTitular()).isPresent()){
 
             return ResponseEntity.badRequest().body("Já existe uma conta com mesmo CPF!");
 
-        } else {
+        }else{
             conta = contaRepository.save(conta);
 
             logger.info("Conta cadastrada com numero: {} e agência: {} ", conta.getNumero(), conta.getAgencia());
-            contaProducer.enviar(conta);
+
+            contaNovaProducer.send(conta);
 
             return ResponseEntity
                     .status(HttpStatus.CREATED)
@@ -45,7 +47,7 @@ public class ContaController {
 
 
     @DeleteMapping("/{id}")
-    public void excluir(@PathVariable Long id) {
+    public void excluir(@PathVariable Long id){
         var conta = contaRepository.findById(id)
                 .orElseThrow(ContaIdInexistenteException::new);
 
@@ -55,10 +57,10 @@ public class ContaController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> consultar(@PathVariable Long id) {
+    public ResponseEntity<?> consultar(@PathVariable Long id){
         var conta = contaRepository.findById(id);
 
-        if (conta.isEmpty()) {
+        if(conta.isEmpty()){
             return ResponseEntity.badRequest().body("Não foi possível encontrar conta com este id");
         }
 

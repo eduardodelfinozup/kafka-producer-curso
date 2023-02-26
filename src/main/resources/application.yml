@@ -29,7 +29,9 @@ spring:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
       client-id: conta
-      topic: NOVA_CONTA
+      topic:
+        nova-conta: NOVA_CONTA
+
   kafka3:
     bootstrap-servers: 127.0.0.1:9094
     producer:
