@@ -40,6 +40,14 @@ spring:
       client-id: marketplace
       topic: NOVA_PROMOCAO
 
+  kafka4:
+    bootstrap-servers: 127.0.0.1:9095
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      client-id: livraria
+      topic: NOVA_VENDA
+
 management:
   health:
     diskSpace:
